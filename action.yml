@@ -13,8 +13,6 @@ runs:
   using: docker
   image: roylines/lambda-build-node12.x
   
-- run: echo rama ${{ inputs.rama }}.
-
 - name: Install Dependencies
   run: npm install --save-dev
 
