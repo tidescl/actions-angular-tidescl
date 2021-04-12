@@ -12,17 +12,17 @@ inputs:
 runs:
   using: docker
   image: roylines/lambda-build-node12.x
-  steps: 
-    - run: echo Branch ${{ inputs.branch }}.
-      shell: bash    
+  
+- run: echo Branch ${{ inputs.branch }}.
+  shell: bash    
 
-    - name: Install Dependencies
-      run: npm install --save-dev
+- name: Install Dependencies
+  run: npm install --save-dev
 
-    - name: Serverless Deploy        
-      run: | 
-        ./node_modules/@angular/cli/bin/ng build --c=dev --aot --extract-css --build-optimizer --optimization
-        ls dist
+- name: Serverless Deploy        
+  run: | 
+    ./node_modules/@angular/cli/bin/ng build --c=dev --aot --extract-css --build-optimizer --optimization
+    ls dist
         
       
 
