@@ -10,28 +10,17 @@ inputs:
 #    description: "Random number"
 #    value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
-  using: "composite"
+  using: docker
+  image: roylines/lambda-build-node12.x
   steps: 
     - run: echo Branch ${{ inputs.branch }}.
       shell: bash    
 
-    - name: Set up Node
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-
     - name: Install Dependencies
       run: npm install --save-dev
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with: 
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-    
     - name: Serverless Deploy        
-      run: | #./node_modules/serverless/bin/serverless.js deploy --stage dev
+      run: | 
         ./node_modules/@angular/cli/bin/ng build --c=dev --aot --extract-css --build-optimizer --optimization
         ls dist
         
