@@ -1,20 +1,19 @@
 name: 'Deploy Angular TIDESCL'
 description: 'Deploy Angular TIDESCL App'
 inputs:
-  branch:  # id of input
+  rama:  # id of input
     description: 'Branch Execution'
     required: true
     default: 'develop'
-##outputs:
-#  random-number: 
-#    description: "Random number"
-#    value: ${{ steps.random-number-generator.outputs.random-id }}
+outputs:
+  random-number: 
+    description: "Random number"
+    value: "salida"
 runs:
   using: docker
   image: roylines/lambda-build-node12.x
   
-- run: echo Branch ${{ inputs.branch }}.
-  shell: bash    
+- run: echo rama ${{ inputs.rama }}.
 
 - name: Install Dependencies
   run: npm install --save-dev
@@ -23,16 +22,3 @@ runs:
   run: | 
     ./node_modules/@angular/cli/bin/ng build --c=dev --aot --extract-css --build-optimizer --optimization
     ls dist
-        
-      
-
-
-    
-
-    #- run: echo Hello ${{ inputs.who-to-greet }}.
-    #  shell: bash
-    #- id: random-number-generator
-    #  run: echo "::set-output name=random-id::$(echo $RANDOM)"
-    #  shell: bash
-    #- run: ${{ github.action_path }}/goodbye.sh
-    #  shell: bash
