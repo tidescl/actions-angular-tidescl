@@ -1,21 +1,49 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: 'Deploy Angular TIDESCL'
+description: 'Deploy Angular TIDESCL App'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  branch:  # id of input
+    description: 'Branch Execution'
     required: true
-    default: 'World'
-outputs:
-  random-number: 
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
+    default: 'develop'
+##outputs:
+#  random-number: 
+#    description: "Random number"
+#    value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
   using: "composite"
   steps: 
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
-    - run: ${{ github.action_path }}/goodbye.sh
-      shell: bash
+    - run: echo Branch ${{ inputs.branch }}.
+      shell: bash    
+
+    - name: Set up Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Install Dependencies
+      run: npm install --save-dev
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with: 
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    
+    - name: Serverless Deploy        
+      run: | #./node_modules/serverless/bin/serverless.js deploy --stage dev
+        ./node_modules/@angular/cli/bin/ng build --c=dev --aot --extract-css --build-optimizer --optimization
+        ls dist
+        
+      
+
+
+    
+
+    #- run: echo Hello ${{ inputs.who-to-greet }}.
+    #  shell: bash
+    #- id: random-number-generator
+    #  run: echo "::set-output name=random-id::$(echo $RANDOM)"
+    #  shell: bash
+    #- run: ${{ github.action_path }}/goodbye.sh
+    #  shell: bash
